@@ -15,8 +15,8 @@ namespace SoftwareKeyboard
     public partial class Form1 : Form
     {
 
-        Button[] btns = new Button[50];
-        string hiragana = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもや ゆ よらりるれろわ を ん";
+        Button[] btns = new Button[100];
+        string hiragana = "あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもや ゆ よらりるれろわ を んがぎぐげござじずぜぞだぢづでどばびぶべぼぱぴぷぺぽぁぃぅぇぉ  っ  ゃ ゅ ょ";
         Dictionary<string, string> henkan = new Dictionary<string, string>() {
             {"あ", "a"},{"い", "i"},{"う", "u"},{"え", "e"}, {"お", "o"},
             {"か", "ka"},{"き","ki"},{"く","ku"},{"け","ke"},{"こ","ko"},
@@ -25,11 +25,18 @@ namespace SoftwareKeyboard
             {"な","na"},{"に","ni"},{"ぬ","nu"},{"ね","ne"},{"の","no"},
             {"は","ha"},{"ひ","hi"},{"ふ","hu"},{"へ","he"},{"ほ","ho"},
             {"ま","ma"},{"み","mi"},{"む","mu"},{"め","me"},{"も","mo"},
-            {"や","ya"},{"  "," "},{"ゆ","yu"},{"   ",""},{"よ","yo"},
+            {"や","ya"},{" "," "},{"ゆ","yu"},{"a",""},{"よ","yo"},
             {"ら","ra"},{"り","ri"},{"る","ru"},{"れ","re"},{"ろ","ro"},
-            {"わ","wa"},{" "," "},{"を","wo"},{"    ",""},{"ん","nn"},
+            {"わ","wa"},{"b"," "},{"を","wo"},{"c",""},{"ん","nn"},
+            {"が","ga"},{"ぎ","gi"},{"ぐ","gu"},{"げ","ge"},{"ご","go"},
+            {"だ","da"},{"ぢ","di"},{"づ","du"},{"で","de"},{"ど","do"},
+            {"ば","ba"},{"び","bi"},{"ぶ","bu"},{"べ","be"},{"ぼ","bo"},
+            {"ぱ","pa"},{"ぴ","pi"},{"ぷ","pu"},{"ぺ","pe"},{"ぽ","po"},
+            {"ぁ","la"},{"ぃ","li"},{"ぅ","lu"},{"ぇ","le"},{"ぉ","lo"},
+            {"d"," "},{"e"," "},{"っ","ltu"},{"      "," "},{"          "," "},
+            {"ゃ","lya"},{"         "," "},{"ゅ","lyu"},{"             "," "},{"ょ","lyo"},
         };
-        int size = 150;
+        int size = 90;
         int nowButtonNumber = 1;
         Form2 f2 = new Form2();
         
@@ -143,12 +150,12 @@ namespace SoftwareKeyboard
 
             // とりあえずウィンドウとサイズを固定
             //this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Size = new Size(size * 10 + 15, size * 5 + 30);
+            this.Size = new Size(size * 18 + 15, size * 5 + 40);
 
             // 最前面にする
-            this.TopMost = true;
+            //this.TopMost = true;
 
-            for (i = 0; i < 10; i++)
+            for (i = 0; i < 18; i++)
             {
                 for (j = 0; j < 5; j++)
                 {
@@ -199,10 +206,8 @@ namespace SoftwareKeyboard
         {
             Control control = (Control)sender;
 
-            Console.WriteLine("iaojfo;iawejoaej");
-
             size = control.Size.Height / 10;
-            ChengeBtnSize(size);
+            //ChengeBtnSize(size);
         }
 
         private void ChengeBtnSize(int size)
