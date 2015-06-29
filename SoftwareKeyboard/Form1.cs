@@ -39,6 +39,8 @@ namespace SoftwareKeyboard
         int size = 90;
         int nowButtonNumber = 1;
         Form2 f2 = new Form2();
+        int protectedKeyCnt = 0;
+
         
         public Form1()
         {
@@ -60,73 +62,49 @@ namespace SoftwareKeyboard
                 return p;
             }
         }
+        // 非アクティブにするおまじないここまで
 
-        /* グローバルフックに変更したからいらない
-        protected override bool ProcessDialogKey(Keys keyData)
-        {
-            switch (keyData)
-            {
-                case Keys.Down:
-                    nowButtonNumber += 1;
-                    if (nowButtonNumber >= 50) nowButtonNumber -= 50;
-                    btns[nowButtonNumber].Select();
-                    break;
-
-                case Keys.Right:
-                    nowButtonNumber += 5;
-                    if (nowButtonNumber >= 50) nowButtonNumber -= 50;
-                    btns[nowButtonNumber].Select();
-
-                    break;
-                case Keys.Up:
-                     nowButtonNumber -= 1;
-                    if (nowButtonNumber < 0) nowButtonNumber += 50;
-                    btns[nowButtonNumber].Select();
-                    break;
-                case Keys.Left:
-                     nowButtonNumber -= 5;
-                    if (nowButtonNumber < 0) nowButtonNumber += 50;
-                    btns[nowButtonNumber].Select();
-                    break;
-
-                default:
-                    return base.ProcessDialogKey(keyData);
-                    break;
-            }
-            return true;
-        }
+        /**
+         * キーボードフックしてるメソッド
+         * 
+         * PCのキー入力をすべてここで受け取ってる
          */
 
         private void keyHookProc(object sender, KeyboardHookedEventArgs e)
         {
 
-            
+            if (protectedKeyCnt == 1)
+            {
+                protectedKeyCnt = 0;
+                return;
+            }
+            protectedKeyCnt++;
 
             btns[nowButtonNumber].BackColor = f2.BtnsColorselect();
             btns[nowButtonNumber].ForeColor = f2.FontColorselect();
-  
+
             switch (e.KeyCode)
             {
                 case Keys.Down:
                     nowButtonNumber += 1;
-                    if (nowButtonNumber >= 50) nowButtonNumber -= 50;
+                    if (nowButtonNumber >= hiragana.Length) nowButtonNumber -= hiragana.Length;
                     btns[nowButtonNumber].Select();
                     break;
 
                 case Keys.Right:
                     nowButtonNumber += 5;
-                    if (nowButtonNumber >= 50) nowButtonNumber -= 50;
+                    if (nowButtonNumber >= hiragana.Length) nowButtonNumber -= hiragana.Length;
                     btns[nowButtonNumber].Select();
 
                     break;
                 case Keys.Up:
                      nowButtonNumber -= 1;
-                    if (nowButtonNumber < 0) nowButtonNumber += 50;
+                    if (nowButtonNumber < 0) nowButtonNumber += hiragana.Length;
                     btns[nowButtonNumber].Select();
                     break;
                 case Keys.Left:
                      nowButtonNumber -= 5;
-                    if (nowButtonNumber < 0) nowButtonNumber += 50;
+                    if (nowButtonNumber < 0) nowButtonNumber += hiragana.Length;
                     btns[nowButtonNumber].Select();
                     break;
                 case Keys.Space:
@@ -136,12 +114,22 @@ namespace SoftwareKeyboard
                     //this.Close();
                     this.Hide();
                     break;
+                case Keys.Enter:
+                    SendKeys.Send(hiragana.Substring(nowButtonNumber,1));
+                    break;
+
             }
             btns[nowButtonNumber].BackColor = f2.CursorColorselect();
         }
 
         private static KeyboardHook keyHook;
 
+        /**
+         *
+         * 初期設定
+         * ボタンの生成とかをしている
+         * 
+         */
         private void Form1_Load(object sender, EventArgs e)
         {
             keyHook = new KeyboardHook();
@@ -196,12 +184,18 @@ namespace SoftwareKeyboard
             
         }
 
-
+        /*
+         * ボタンをクリックしたときに呼び出されるメソッド
+         * 
+         */
         void btn_click(object sender, EventArgs e)
         {
             SendKeys.Send(henkan[((Button)sender).Text]);
         }
-
+        
+        /*
+         * フォームの大きさが変わった時に呼び出されるメソッド
+         */ 
         private void Form1_Resize(object sender, System.EventArgs e)
         {
             Control control = (Control)sender;
@@ -210,6 +204,10 @@ namespace SoftwareKeyboard
             //ChengeBtnSize(size);
         }
 
+        /*
+         * ボタンの大きさを一つずつ変更するメソッド
+         * 
+         */
         private void ChengeBtnSize(int size)
         {
             foreach (Button btn in this.btns)
