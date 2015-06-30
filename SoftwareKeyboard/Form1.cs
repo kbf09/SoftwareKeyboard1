@@ -136,6 +136,7 @@ namespace SoftwareKeyboard
          */
         private void Form1_Load(object sender, EventArgs e)
         {
+
             keyHook = new KeyboardHook();
             keyHook.KeyboardHooked += new KeyboardHookedEventHandler(keyHookProc);
             int i, j, sum = 0;
@@ -147,7 +148,7 @@ namespace SoftwareKeyboard
             int w = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width / 18;
             size = h;
             //this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Size = new Size(size * w + 15, h * 5 + 40);
+            this.Size = new Size(size * w - size, h * 5 + 40);
 
             // 最前面にする
             //this.TopMost = true;
@@ -226,5 +227,11 @@ namespace SoftwareKeyboard
             }
         }
          * */
+
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Environment.Exit(0);
+        }
     }
 }

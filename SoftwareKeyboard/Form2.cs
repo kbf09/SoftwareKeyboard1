@@ -145,11 +145,12 @@ namespace SoftwareKeyboard
 
         private void button2_Click(object sender, EventArgs e)
         {
-            btnsColor = BbtnsColor;
-            cursorColor = BcursorColor;
-            btnsfontColor = BbtnsfontColor;
-            System.Threading.Thread.Sleep(2000);
-           // this.Visible = false;
+            //btnsColor = BbtnsColor;
+            //cursorColor = BcursorColor;
+            //btnsfontColor = BbtnsfontColor;
+            //System.Threading.Thread.Sleep(2000);
+            //this.Visible = false;
+            this.Close();
         }
     }
 }
