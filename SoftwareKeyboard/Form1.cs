@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HongliangSoft.Utilities.Gui;
+using System.Windows.Forms;
+using System.Drawing;
 
 
 namespace SoftwareKeyboard
@@ -29,6 +31,7 @@ namespace SoftwareKeyboard
             {"ら","ra"},{"り","ri"},{"る","ru"},{"れ","re"},{"ろ","ro"},
             {"わ","wa"},{"b"," "},{"を","wo"},{"c",""},{"ん","nn"},
             {"が","ga"},{"ぎ","gi"},{"ぐ","gu"},{"げ","ge"},{"ご","go"},
+            {"ざ","za"},{"じ","zi"},{"ず","zu"},{"ぜ","ze"},{"ぞ","zo"},
             {"だ","da"},{"ぢ","di"},{"づ","du"},{"で","de"},{"ど","do"},
             {"ば","ba"},{"び","bi"},{"ぶ","bu"},{"べ","be"},{"ぼ","bo"},
             {"ぱ","pa"},{"ぴ","pi"},{"ぷ","pu"},{"ぺ","pe"},{"ぽ","po"},
@@ -62,6 +65,7 @@ namespace SoftwareKeyboard
                 return p;
             }
         }
+
         // 非アクティブにするおまじないここまで
 
         /**
@@ -112,7 +116,7 @@ namespace SoftwareKeyboard
                     //f2.ShowDialog(this);
                     //System.Threading.Thread.Sleep(5000);
                     //this.Close();
-                    this.Hide();
+                    //this.Hide();
                     break;
                 case Keys.Enter:
                     SendKeys.Send(hiragana.Substring(nowButtonNumber,1));
@@ -130,6 +134,9 @@ namespace SoftwareKeyboard
          * ボタンの生成とかをしている
          * 
          */
+
+
+
         private void Form1_Load(object sender, EventArgs e)
         {
             keyHook = new KeyboardHook();
@@ -170,7 +177,6 @@ namespace SoftwareKeyboard
 
             }
 
-            
             //Color cursorColor = f2.CursorColorselect();
 
             // 「あ」にフォーカス
@@ -183,6 +189,7 @@ namespace SoftwareKeyboard
 
             
         }
+
 
         /*
          * ボタンをクリックしたときに呼び出されるメソッド
