@@ -8,8 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HongliangSoft.Utilities.Gui;
-using System.Windows.Forms;
-using System.Drawing;
 
 
 namespace SoftwareKeyboard
@@ -31,7 +29,6 @@ namespace SoftwareKeyboard
             {"ら","ra"},{"り","ri"},{"る","ru"},{"れ","re"},{"ろ","ro"},
             {"わ","wa"},{"b"," "},{"を","wo"},{"c",""},{"ん","nn"},
             {"が","ga"},{"ぎ","gi"},{"ぐ","gu"},{"げ","ge"},{"ご","go"},
-            {"ざ","za"},{"じ","zi"},{"ず","zu"},{"ぜ","ze"},{"ぞ","zo"},
             {"だ","da"},{"ぢ","di"},{"づ","du"},{"で","de"},{"ど","do"},
             {"ば","ba"},{"び","bi"},{"ぶ","bu"},{"べ","be"},{"ぼ","bo"},
             {"ぱ","pa"},{"ぴ","pi"},{"ぷ","pu"},{"ぺ","pe"},{"ぽ","po"},
@@ -41,12 +38,16 @@ namespace SoftwareKeyboard
         };
         int size = 90;
         int nowButtonNumber = 1;
-        Form2 f2 = new Form2();
+        Form2 f2;
         int protectedKeyCnt = 0;
+        Color btnsfontColor, cursorColor, btnsColor;
 
-        
-        public Form1()
+
+        public Form1(Color btnsfontColor, Color cursorColor, Color btnsColor)
         {
+            this.btnsfontColor = btnsfontColor;
+            this.cursorColor = cursorColor;
+            this.btnsColor = btnsColor;
             InitializeComponent();
         }
 
@@ -65,7 +66,6 @@ namespace SoftwareKeyboard
                 return p;
             }
         }
-
         // 非アクティブにするおまじないここまで
 
         /**
@@ -84,8 +84,8 @@ namespace SoftwareKeyboard
             }
             protectedKeyCnt++;
 
-            btns[nowButtonNumber].BackColor = f2.BtnsColorselect();
-            btns[nowButtonNumber].ForeColor = f2.FontColorselect();
+            btns[nowButtonNumber].BackColor = btnsColor;
+            btns[nowButtonNumber].ForeColor = btnsfontColor;
 
             switch (e.KeyCode)
             {
@@ -112,18 +112,18 @@ namespace SoftwareKeyboard
                     btns[nowButtonNumber].Select();
                     break;
                 case Keys.Space:
-                    f2.Show();
+                    f2.Visible = true;
                     //f2.ShowDialog(this);
                     //System.Threading.Thread.Sleep(5000);
                     //this.Close();
-                    //this.Hide();
+                    this.Visible=false;
                     break;
                 case Keys.Enter:
                     SendKeys.Send(hiragana.Substring(nowButtonNumber,1));
                     break;
 
             }
-            btns[nowButtonNumber].BackColor = f2.CursorColorselect();
+            btns[nowButtonNumber].BackColor = cursorColor;
         }
 
         private static KeyboardHook keyHook;
@@ -134,18 +134,21 @@ namespace SoftwareKeyboard
          * ボタンの生成とかをしている
          * 
          */
-
-
-
         private void Form1_Load(object sender, EventArgs e)
         {
+
             keyHook = new KeyboardHook();
             keyHook.KeyboardHooked += new KeyboardHookedEventHandler(keyHookProc);
             int i, j, sum = 0;
 
             // とりあえずウィンドウとサイズを固定
+            //ディスプレイの高さ
+            int h = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height / 12;
+            //ディスプレイの幅
+            int w = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width / 18;
+            size = h;
             //this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Size = new Size(size * 18 + 15, size * 5 + 40);
+            this.Size = new Size(size * w - size, h * 5 + 40);
 
             // 最前面にする
             //this.TopMost = true;
@@ -161,8 +164,8 @@ namespace SoftwareKeyboard
                     btns[sum].Name = "id."+ sum;
                     btns[sum].Text = this.hiragana.Substring(sum, 1);
                     btns[sum].Font = new Font("MS UI Gothic", 29);
-                    btns[sum].BackColor = f2.BtnsColorselect();
-                    btns[sum].ForeColor = f2.FontColorselect();
+                    btns[sum].BackColor = btnsColor;
+                    btns[sum].ForeColor = btnsfontColor;
 
                     //サイズと位置を設定する
                     btns[sum].Location = new Point(size * i, size * j);
@@ -177,11 +180,12 @@ namespace SoftwareKeyboard
 
             }
 
+            
             //Color cursorColor = f2.CursorColorselect();
 
             // 「あ」にフォーカス
             btns[0].Select();
-            btns[0].BackColor = f2.CursorColorselect();
+            btns[0].BackColor = cursorColor;
 
             // 今のフォーカスは「あ」なのでもどす
             nowButtonNumber = 0;
@@ -189,7 +193,6 @@ namespace SoftwareKeyboard
 
             
         }
-
 
         /*
          * ボタンをクリックしたときに呼び出されるメソッド
@@ -208,19 +211,27 @@ namespace SoftwareKeyboard
             Control control = (Control)sender;
 
             size = control.Size.Height / 10;
-            //ChengeBtnSize(size);
+            Console.WriteLine(control.Size.Height);
+            //ChengeBtnSize();
         }
 
         /*
          * ボタンの大きさを一つずつ変更するメソッド
          * 
-         */
-        private void ChengeBtnSize(int size)
+         *
+        private void ChengeBtnSize()
         {
-            foreach (Button btn in this.btns)
+            foreach (Button btn in btns)
             {
-                btn.Size = new Size(size, size);
+                 btn.Size = new Size(size, size);
             }
+        }
+         * */
+
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

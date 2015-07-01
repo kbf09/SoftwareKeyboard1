@@ -24,9 +24,10 @@ namespace SoftwareKeyboard
        static Color BcursorColor = Color.Red;
        static Color BbtnsfontColor = Color.Black;
 
+       
         public Form2()
         {
-            InitializeComponent();
+            InitializeComponent();     
         }
 
         private void Form2_Load(object sender, EventArgs e)
@@ -128,22 +129,27 @@ namespace SoftwareKeyboard
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Console.Write(btnsfontColor.ToString());
 
-            Form1 f1 = new Form1();
+            Form1 f1 = new Form1(btnsfontColor, cursorColor, btnsColor);
             f1.Show();
+            /*
+             foreach (Button btn in this.btns)
+            {
+                 //btn.Size = new Size(size, size);
+            }
+             * */
             System.Threading.Thread.Sleep(2000);
-            this.Close();
+            this.Visible=false;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            btnsColor = BbtnsColor;
-            cursorColor = BcursorColor;
-            btnsfontColor = BbtnsfontColor;
-
-            Form1 f1 = new Form1();
-            f1.Show();
-            System.Threading.Thread.Sleep(2000);
+            //btnsColor = BbtnsColor;
+            //cursorColor = BcursorColor;
+            //btnsfontColor = BbtnsfontColor;
+            //System.Threading.Thread.Sleep(2000);
+            //this.Visible = false;
             this.Close();
         }
     }
