@@ -41,6 +41,7 @@ namespace SoftwareKeyboard
         };
         int size = 90;
         int nowButtonNumber = 1;
+        TextBox txt;
         Form2 f2;
         int protectedKeyCnt = 0;
         Color btnsfontColor, cursorColor, btnsColor;
@@ -56,19 +57,7 @@ namespace SoftwareKeyboard
 
         
         // 非アクティブにするおまじない
-        private const int WS_EX_NOACTIVATE = 0x8000000;
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams p = base.CreateParams;
-                if (!base.DesignMode)
-                {
-                    p.ExStyle = p.ExStyle | (WS_EX_NOACTIVATE);
-                }
-                return p;
-            }
-        }
+      
 
         // 非アクティブにするおまじないここまで
 
@@ -131,6 +120,8 @@ namespace SoftwareKeyboard
                 
                 case Keys.Enter:
                     SendKeys.Send(hiragana.Substring(nowButtonNumber,1));
+                    //Console.WriteLine(txt.Text);
+                    Clipboard.SetDataObject(txt.Text);
                     break;
 
             }
@@ -198,7 +189,7 @@ namespace SoftwareKeyboard
 
             //テキストボックスを生成
 
-            TextBox txt = new TextBox();
+            txt = new TextBox();
             //txt.Multiline = true;
             txt.Font = new Font("txt", 30);
             txt.Size = new Size(size*10, size);
