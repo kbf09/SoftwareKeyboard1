@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using HongliangSoft.Utilities.Gui;
+using System.Windows.Forms;
+using System.Drawing;
 
 
 namespace SoftwareKeyboard
@@ -29,6 +31,7 @@ namespace SoftwareKeyboard
             {"ら","ra"},{"り","ri"},{"る","ru"},{"れ","re"},{"ろ","ro"},
             {"わ","wa"},{"b"," "},{"を","wo"},{"c",""},{"ん","nn"},
             {"が","ga"},{"ぎ","gi"},{"ぐ","gu"},{"げ","ge"},{"ご","go"},
+            {"ざ","za"},{"じ","zi"},{"ず","zu"},{"ぜ","ze"},{"ぞ","zo"},
             {"だ","da"},{"ぢ","di"},{"づ","du"},{"で","de"},{"ど","do"},
             {"ば","ba"},{"び","bi"},{"ぶ","bu"},{"べ","be"},{"ぼ","bo"},
             {"ぱ","pa"},{"ぴ","pi"},{"ぷ","pu"},{"ぺ","pe"},{"ぽ","po"},
@@ -42,7 +45,7 @@ namespace SoftwareKeyboard
         int protectedKeyCnt = 0;
         Color btnsfontColor, cursorColor, btnsColor;
 
-
+        
         public Form1(Color btnsfontColor, Color cursorColor, Color btnsColor)
         {
             this.btnsfontColor = btnsfontColor;
@@ -66,7 +69,21 @@ namespace SoftwareKeyboard
                 return p;
             }
         }
+
         // 非アクティブにするおまじないここまで
+
+        
+        //おまじないシリーズ２　テキストボックスに常にフォーカスを移すおまじない
+
+        class NotSelectableButton : System.Windows.Forms.Button
+        {
+            public NotSelectableButton()
+            {
+                this.SetStyle(ControlStyles.Selectable, false);
+            }
+        }
+
+        // 常にフォーカスを移すおまじないここまで
 
         /**
          * キーボードフックしてるメソッド
@@ -111,13 +128,7 @@ namespace SoftwareKeyboard
                     if (nowButtonNumber < 0) nowButtonNumber += hiragana.Length;
                     btns[nowButtonNumber].Select();
                     break;
-                case Keys.Space:
-                    f2.Visible = true;
-                    //f2.ShowDialog(this);
-                    //System.Threading.Thread.Sleep(5000);
-                    //this.Close();
-                    this.Visible=false;
-                    break;
+                
                 case Keys.Enter:
                     SendKeys.Send(hiragana.Substring(nowButtonNumber,1));
                     break;
@@ -134,6 +145,9 @@ namespace SoftwareKeyboard
          * ボタンの生成とかをしている
          * 
          */
+
+
+
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -148,7 +162,7 @@ namespace SoftwareKeyboard
             int w = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width / 18;
             size = h;
             //this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Size = new Size(size * w - size, h * 5 + 40);
+            this.Size = new Size(size * w - size, h * 6 + 40);
 
             // 最前面にする
             //this.TopMost = true;
@@ -158,7 +172,9 @@ namespace SoftwareKeyboard
                 for (j = 0; j < 5; j++)
                 {
                     //Buttonクラスのインスタンスを作成する
-                    btns[sum] = new System.Windows.Forms.Button();
+                    btns[sum] = new NotSelectableButton();
+
+                   
 
                     //Buttonコントロールのプロパティを設定する
                     btns[sum].Name = "id."+ sum;
@@ -180,7 +196,16 @@ namespace SoftwareKeyboard
 
             }
 
-            
+            //テキストボックスを生成
+
+            TextBox txt = new TextBox();
+            //txt.Multiline = true;
+            txt.Font = new Font("txt", 30);
+            txt.Size = new Size(size*10, size);
+            txt.Location = new Point(0, size * 5);
+            this.Controls.Add(txt);
+
+
             //Color cursorColor = f2.CursorColorselect();
 
             // 「あ」にフォーカス
@@ -193,6 +218,7 @@ namespace SoftwareKeyboard
 
             
         }
+
 
         /*
          * ボタンをクリックしたときに呼び出されるメソッド
@@ -223,7 +249,7 @@ namespace SoftwareKeyboard
         {
             foreach (Button btn in btns)
             {
-                 btn.Size = new Size(size, size);
+                btn.Size = new Size(size, size);
             }
         }
          * */
