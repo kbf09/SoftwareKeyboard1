@@ -83,6 +83,8 @@ namespace SoftwareKeyboard
         private void keyHookProc(object sender, KeyboardHookedEventArgs e)
         {
 
+            return;
+
             if (protectedKeyCnt == 1)
             {
                 protectedKeyCnt = 0;
