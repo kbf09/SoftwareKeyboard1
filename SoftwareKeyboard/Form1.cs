@@ -120,8 +120,7 @@ namespace SoftwareKeyboard
                 
                 case Keys.Enter:
                     SendKeys.Send(hiragana.Substring(nowButtonNumber,1));
-                    //Console.WriteLine(txt.Text);
-                    Clipboard.SetDataObject(txt.Text);
+                    Clipboard.SetDataObject(txt.Text + hiragana.Substring(nowButtonNumber, 1));
                     break;
 
             }
@@ -165,8 +164,6 @@ namespace SoftwareKeyboard
                     //Buttonクラスのインスタンスを作成する
                     btns[sum] = new NotSelectableButton();
 
-                   
-
                     //Buttonコントロールのプロパティを設定する
                     btns[sum].Name = "id."+ sum;
                     btns[sum].Text = this.hiragana.Substring(sum, 1);
@@ -202,6 +199,8 @@ namespace SoftwareKeyboard
             // 「あ」にフォーカス
             btns[0].Select();
             btns[0].BackColor = cursorColor;
+
+            txt.Select();
 
             // 今のフォーカスは「あ」なのでもどす
             nowButtonNumber = 0;
