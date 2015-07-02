@@ -57,8 +57,20 @@ namespace SoftwareKeyboard
 
         
         // 非アクティブにするおまじない
-      
-
+       private const int WS_EX_NOACTIVATE = 0x8000000;
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams p = base.CreateParams;
+                if (!base.DesignMode)
+                {
+                    p.ExStyle = p.ExStyle | (WS_EX_NOACTIVATE);
+                }
+                return p;
+            }
+        }
+        
         // 非アクティブにするおまじないここまで
 
         
