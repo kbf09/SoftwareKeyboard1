@@ -57,8 +57,20 @@ namespace SoftwareKeyboard
 
         
         // 非アクティブにするおまじない
-      
-
+       private const int WS_EX_NOACTIVATE = 0x8000000;
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams p = base.CreateParams;
+                if (!base.DesignMode)
+                {
+                    p.ExStyle = p.ExStyle | (WS_EX_NOACTIVATE);
+                }
+                return p;
+            }
+        }
+        
         // 非アクティブにするおまじないここまで
 
         
@@ -82,8 +94,6 @@ namespace SoftwareKeyboard
 
         private void keyHookProc(object sender, KeyboardHookedEventArgs e)
         {
-
-            return;
 
             if (protectedKeyCnt == 1)
             {
@@ -122,7 +132,8 @@ namespace SoftwareKeyboard
                 
                 case Keys.Enter:
                     SendKeys.Send(hiragana.Substring(nowButtonNumber,1));
-                    Clipboard.SetDataObject(txt.Text + hiragana.Substring(nowButtonNumber, 1));
+                    //Console.WriteLine(txt.Text);
+                    Clipboard.SetDataObject(txt.Text);
                     break;
 
             }
@@ -166,6 +177,8 @@ namespace SoftwareKeyboard
                     //Buttonクラスのインスタンスを作成する
                     btns[sum] = new NotSelectableButton();
 
+                   
+
                     //Buttonコントロールのプロパティを設定する
                     btns[sum].Name = "id."+ sum;
                     btns[sum].Text = this.hiragana.Substring(sum, 1);
@@ -201,8 +214,6 @@ namespace SoftwareKeyboard
             // 「あ」にフォーカス
             btns[0].Select();
             btns[0].BackColor = cursorColor;
-
-            txt.Select();
 
             // 今のフォーカスは「あ」なのでもどす
             nowButtonNumber = 0;
